@@ -2,12 +2,16 @@
 #include <freeglut.h>
 #include <iostream>
 #include <glm.hpp>
+#include "Shader.h"
+#include "Player.h"
 
 
 int screenWidth = 800;
 int screenHeight = 600;
 unsigned char pressedKeys[256];
 unsigned char initialPressedKeys[256];
+Shader* basicShader;
+Player* testPlayer;
 
 void display()
 {
@@ -38,8 +42,21 @@ void keyboardUp(unsigned char key, int mouseX, int mouseY)
 
 void handleKeys()
 {
-	if (pressedKeys[27])//esc
+	if(pressedKeys[27])//esc
 		glutLeaveMainLoop();
+
+	if (pressedKeys['w'])
+	{
+		testPlayer->moveUp(0.1f);
+		std::cout << testPlayer->pos.y << std::endl;
+	}
+	if (pressedKeys['s'])
+	{
+		testPlayer->moveDown(0.1f);
+		std::cout << testPlayer->pos.y << std::endl;
+	}
+
+
 }
 
 void update()
@@ -52,7 +69,11 @@ void update()
 void init()
 {
 	glewInit();
-	glEnable(GL_DEPTH_TEST);
+
+	basicShader = new Shader("BasicShader.vs", "BasicShader.fs");
+	basicShader->use();
+
+	testPlayer = new Player(true);
 }
 
 
