@@ -76,7 +76,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>freeglut\include\GL;glew-2.1.0\include\GL\;glm\glm</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>freeglut\include\GL;glew-2.1.0\include\GL\;glm</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>freeglut\lib;glew-2.1.0\lib\Release\Win32;</AdditionalLibraryDirectories>
@@ -99,7 +99,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>freeglut\include\GL;glew-2.1.0\include\GL\;glm\glm</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>freeglut\include\GL;glew-2.1.0\include\GL\;glm</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
