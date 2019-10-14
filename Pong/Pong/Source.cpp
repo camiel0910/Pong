@@ -78,7 +78,7 @@ void init()
 
 
 
-void main(int argc, char* argv[])
+int main(int argc, char* argv[])
 {
 	glutInit(&argc, argv);
 	glutInitWindowSize(screenWidth, screenHeight);
@@ -94,4 +94,6 @@ void main(int argc, char* argv[])
 	init();
 
 	glutMainLoop();
+
+	return 1;
 }
