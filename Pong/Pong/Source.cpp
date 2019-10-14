@@ -61,12 +61,39 @@ void initShader()
 
 void display()
 {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+
 	//set view
 	glm::mat4 view = glm::mat4(1.0f);
 	view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+	basicShader->setUniformMatrix4fv("view", view);
 
+	//set projection
+	glm::mat4 projection(1.0f);
+	projection = glm::ortho(0.0f, 1000.0f, 0.0f, 1000.0f, -1.0f, 1.0f);
+	basicShader->setUniformMatrix4fv("projection", projection);
+
+	glBindVertexArray(basicShaderVAO);
+
+
+	glm::mat4 model;
+	for(int i = 0; i < players.size(); i++)
+	{
+		Player* currentPlayer = &players[i];
+
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(currentPlayer->pos.x,currentPlayer->pos.y,0));
+		basicShader->setUniformMatrix4fv("model", model);
+
+		glDrawArrays(GL_TRIANGLES, 0, playerDrawData.vertices.size());
+	}
+
+	glBindVertexArray(0);
 	
 
+
+	glutSwapBuffers();
 }
 
 void reshape(int newScreenWidth, int newScreenHeight)
@@ -120,6 +147,7 @@ void update()
 void init()
 {
 	glewInit();	
+	glEnable(GL_DEPTH_TEST);
 	initShader();
 	setupGames();
 
