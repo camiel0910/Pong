@@ -1,11 +1,15 @@
 #pragma once
 
-const float gameBoardWidth = 800;
-const float gameBoardHeight = 700;
+
+static struct 
+{
+	const float width = 800;
+	const float height = 700;
+
+	const float topEdge = height / 2;
+	const float bottomEdge = -height / 2;
+	const float leftEdge = -width / 2;
+	const float rightEdge = width / 2;
+} gameBoard;
 
 
-
-const float gameBoardTopEdge = gameBoardHeight / 2;
-const float gameBoardBottomEdge = -gameBoardHeight / 2;
-const float gameBoardLeftEdge = -gameBoardWidth / 2;
-const float gameBoardRightEdge = gameBoardWidth / 2;

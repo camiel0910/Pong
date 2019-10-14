@@ -10,4 +10,5 @@ public:
 	glm::vec2 pos = glm::vec2();
 	glm::vec2 forceDir = glm::vec2();
 	float force = 1;
+	Ball() {};
 };

@@ -4,18 +4,69 @@
 #include <glm.hpp>
 #include "Shader.h"
 #include "Player.h"
+#include "GameInstance.h"
+#include <vector>
 
 
+//opengl
 int screenWidth = 800;
 int screenHeight = 600;
 unsigned char pressedKeys[256];
 unsigned char initialPressedKeys[256];
+
+//shader
 Shader* basicShader;
-Player* testPlayer;
+unsigned int basicShaderVAO;
+unsigned int basicShaderVBO;
+
+
+//pong
+std::vector<Player> players;
+std::vector<Ball> balls;
+std::vector<GameInstance> games;
+
+
+void setupGames()
+{
+	players.push_back(Player(true, PLAYERTYPE::HUMAN));
+	players.push_back(Player(false, PLAYERTYPE::NONE));
+	balls.push_back(Ball());
+	games.push_back(GameInstance(&players[players.size() - 2], &players[players.size() - 1], &balls[balls.size()-1]));
+}
+
+void initShader()
+{
+	basicShader = new Shader("BasicShader.vs", "BasicShader.fs");
+	basicShader->use();
+
+	glGenVertexArrays(1, &basicShaderVAO);
+	glBindVertexArray(basicShaderVAO);
+
+	glGenBuffers(1, &basicShaderVBO);
+	glBindBuffer(GL_ARRAY_BUFFER, basicShaderVBO);
+	glBufferData(GL_ARRAY_BUFFER, playerDrawData.vertices.size() * sizeof(Vertex), &playerDrawData.vertices[0], GL_STATIC_DRAW);
+
+	//location 0: position
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+	glEnableVertexAttribArray(0);
+
+	//location 1: color
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+}
+
 
 void display()
 {
+	//set view
+	glm::mat4 view = glm::mat4(1.0f);
+	view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+
 	
+
 }
 
 void reshape(int newScreenWidth, int newScreenHeight)
@@ -45,7 +96,7 @@ void handleKeys()
 	if(pressedKeys[27])//esc
 		glutLeaveMainLoop();
 
-	if (pressedKeys['w'])
+	/*if (pressedKeys['w'])
 	{
 		testPlayer->moveUp(0.1f);
 		std::cout << testPlayer->pos.y << std::endl;
@@ -54,7 +105,7 @@ void handleKeys()
 	{
 		testPlayer->moveDown(0.1f);
 		std::cout << testPlayer->pos.y << std::endl;
-	}
+	}*/
 
 
 }
@@ -68,12 +119,10 @@ void update()
 
 void init()
 {
-	glewInit();
+	glewInit();	
+	initShader();
+	setupGames();
 
-	basicShader = new Shader("BasicShader.vs", "BasicShader.fs");
-	basicShader->use();
-
-	testPlayer = new Player(true);
 }
 
 
