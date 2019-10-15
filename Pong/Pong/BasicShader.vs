@@ -10,6 +10,6 @@ out vec4 color;
 
 void main()
 {
-	gl_Position = projection * view * model * vec4(aPos.x, aPos.y, aPos.z, 1.0);
+	gl_Position = vec4(aPos, 1.0);
 	color = aColor;
 }

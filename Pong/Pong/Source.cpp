@@ -42,17 +42,18 @@ void initShader()
 	glGenVertexArrays(1, &basicShaderVAO);
 	glBindVertexArray(basicShaderVAO);
 
-	glGenBuffers(1, &basicShaderVBO);
+
+	glGenBuffers(1, &basicShaderVBO);	
 	glBindBuffer(GL_ARRAY_BUFFER, basicShaderVBO);
-	glBufferData(GL_ARRAY_BUFFER, playerDrawData.vertices.size() * sizeof(Vertex), &playerDrawData.vertices[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(playerDrawData.vertices), &playerDrawData.vertices[0], GL_STATIC_DRAW);
 
 	//location 0: position
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
 	glEnableVertexAttribArray(0);
 
-	//location 1: color
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(1);
+	////location 1: color
+	//glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(3 * sizeof(float)));
+	//glEnableVertexAttribArray(1);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
@@ -61,37 +62,40 @@ void initShader()
 
 void display()
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClearColor(0.8, 0.8, 0.8, 1);
+	glEnable(GL_DEPTH_TEST);
+
+
+	basicShader->use();
 
 	//set view
 	glm::mat4 view = glm::mat4(1.0f);
-	view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
-	basicShader->setUniformMatrix4fv("view", view);
+	//view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+	//basicShader->setUniformMatrix4fv("view", view);
 
 	//set projection
 	glm::mat4 projection(1.0f);
-	projection = glm::ortho(0.0f, 1000.0f, 0.0f, 1000.0f, -1.0f, 1.0f);
-	basicShader->setUniformMatrix4fv("projection", projection);
+	//projection = glm::ortho(0.0f, 1000.0f, 0.0f, 1000.0f, -1.0f, 1.0f);
+	//basicShader->setUniformMatrix4fv("projection", projection);
 
-	glBindVertexArray(basicShaderVAO);
+	
 
 
 	glm::mat4 model;
-	for(int i = 0; i < players.size(); i++)
+	for(int i = 0; i < 1; i++)
 	{
 		Player* currentPlayer = &players[i];
 
 		model = glm::mat4(1.0f);
 		model = glm::translate(model, glm::vec3(currentPlayer->pos.x,currentPlayer->pos.y,0));
-		basicShader->setUniformMatrix4fv("model", model);
+		//basicShader->setUniformMatrix4fv("model", model);
 
+		glBindVertexArray(basicShaderVAO);
 		glDrawArrays(GL_TRIANGLES, 0, playerDrawData.vertices.size());
+		glBindVertexArray(0);
 	}
-
-	glBindVertexArray(0);
-	
-
 
 	glutSwapBuffers();
 }
@@ -146,8 +150,8 @@ void update()
 
 void init()
 {
-	glewInit();	
-	glEnable(GL_DEPTH_TEST);
+	glewInit();
+
 	initShader();
 	setupGames();
 
@@ -157,10 +161,15 @@ void init()
 
 int main(int argc, char* argv[])
 {
+	glewInit();
+
 	glutInit(&argc, argv);
 	glutInitWindowSize(screenWidth, screenHeight);
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
 	glutCreateWindow("Pong");
+
+
+	init();
 
 	glutDisplayFunc(display);
 	glutReshapeFunc(reshape);
@@ -168,7 +177,7 @@ int main(int argc, char* argv[])
 	glutKeyboardUpFunc(keyboardUp);
 	glutIdleFunc(update);
 
-	init();
+
 
 	glutMainLoop();
 
