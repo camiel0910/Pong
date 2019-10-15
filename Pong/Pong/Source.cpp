@@ -45,15 +45,15 @@ void initShader()
 
 	glGenBuffers(1, &basicShaderVBO);	
 	glBindBuffer(GL_ARRAY_BUFFER, basicShaderVBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(playerDrawData.vertices), &playerDrawData.vertices[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, playerDrawData.vertices.size() * sizeof(Vertex), &playerDrawData.vertices[0], GL_STATIC_DRAW);
 
 	//location 0: position
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
 	glEnableVertexAttribArray(0);
 
 	////location 1: color
-	//glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(3 * sizeof(float)));
-	//glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
@@ -70,9 +70,12 @@ void display()
 
 	basicShader->use();
 
+	//todo projection and view uniform setten
+
+
 	//set view
 	glm::mat4 view = glm::mat4(1.0f);
-	//view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+	view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
 	//basicShader->setUniformMatrix4fv("view", view);
 
 	//set projection
@@ -89,8 +92,8 @@ void display()
 		Player* currentPlayer = &players[i];
 
 		model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(currentPlayer->pos.x,currentPlayer->pos.y,0));
-		//basicShader->setUniformMatrix4fv("model", model);
+		model = glm::translate(model, glm::vec3(0,0,0));
+		basicShader->setUniformMatrix4fv("model", model);
 
 		glBindVertexArray(basicShaderVAO);
 		glDrawArrays(GL_TRIANGLES, 0, playerDrawData.vertices.size());
