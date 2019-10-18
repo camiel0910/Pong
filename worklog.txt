@@ -4,4 +4,10 @@ Date		Starttime	Endtime		Time	What
 29/08/2019	14:00		14:45		0:45	Onderzoek machine learning
 17/09/2019	16:00		18:30		2:30	Project setup, start pong maken
 14/10/2019	12:30		18:00		5:30	Pong maken
-15/10/2019	13:00		
+15/10/2019	13:00		17:30		4:30	Pong maken
+17/10/2019	13:30		18:00		4:30	Pong gemaakt
+18/10/2019	11:15		
+
+
+
+					Total:	18:15	

@@ -11,28 +11,28 @@ Player::Player(bool leftPlayer, PLAYERTYPE playerType)
 
 	Player::leftPlayer = leftPlayer;
 	if (Player::leftPlayer)
-		pos.x = -gameBoard.leftEdge + 50;
+		pos.x = 50;
 	else
-		pos.x = gameBoard.rightEdge - 50;
+		pos.x = gameBoard.width - 50;
 
-	pos.y = 0;
+	pos.y = gameBoard.height/2;
 }
 
 
 void Player::moveUp(float deltaTime)
 {
-	float newPosY = pos.y + speed * deltaTime;
-	if (newPosY + playerHeight / 2 > gameBoard.topEdge)
-		pos.y = gameBoard.topEdge - playerHeight / 2;
+	float newPosY = pos.y + gameBoard.playerSpeed * deltaTime;
+	if (newPosY + playerHeight / 2 > gameBoard.height)
+		pos.y = gameBoard.height - playerHeight / 2;
 	else
 		pos.y = newPosY;
 }
 
 void Player::moveDown(float deltaTime)
 {
-	float newPosY = pos.y - speed * deltaTime;
-	if (newPosY - playerHeight / 2 < gameBoard.bottomEdge)
-		pos.y = gameBoard.bottomEdge + playerHeight / 2;
+	float newPosY = pos.y - gameBoard.playerSpeed * deltaTime;
+	if (newPosY - playerHeight / 2 < 0)
+		pos.y = playerHeight / 2;
 	else
 		pos.y = newPosY;
 }
