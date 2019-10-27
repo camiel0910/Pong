@@ -7,7 +7,7 @@ Date		Starttime	Endtime		Time	What
 15/10/2019	13:00		17:30		4:30	Pong maken
 17/10/2019	13:30		18:00		4:30	Pong gemaakt
 18/10/2019	11:15		14:30		3:15	mlpack werkend zien te krijgen		
-24/10/2019	11:00		
+24/10/2019	11:00		17:00		6:00	mlpack werkt en begin aan neuralnetwork, veel onderzoek moeten doen.
+25/10/2019	12:00		15:45		3:45	neuralnetwork trainen
 
-
-					Total:	21:30	
+					Total:	31:00	

@@ -6,6 +6,19 @@
 #include "Player.h"
 #include "GameInstance.h"
 #include <vector>
+#include "NeuralNetwork.h"
+#include <cstdlib>
+#include <ctime>
+#include <iostream>
+#include <string>
+#include <mlpack/core.hpp>
+#include <mlpack/methods/ann/ffn.hpp>
+#include <mlpack/methods/ann/layer/layer.hpp>
+#include <mlpack/methods/ann/loss_functions/mean_squared_error.hpp>
+
+
+using namespace mlpack;
+using namespace mlpack::ann;
 
 
 //opengl
@@ -41,6 +54,79 @@ unsigned int ballVBO;
 std::vector<Player> players;
 std::vector<Ball> balls;
 std::vector<GameInstance> games;
+
+//neural network
+arma::mat trainData;
+enum AIMOVE { UP, DOWN };
+
+
+void setupNeuralNetwork()
+{
+	arma::mat trainData;
+	arma::mat trainLabels;
+
+	trainData.load("trainData.txt");
+	trainLabels.load("trainLabels.txt");
+
+
+
+	ann::FFN<> model;
+
+	model.Add<Linear<>>(trainData.n_rows, 8);
+	model.Add<SigmoidLayer<>>();
+	model.Add<Linear<>>(8, 1);
+	model.Add<SigmoidLayer<>>();
+
+	//model.Train(trainData, trainLabels);
+
+
+}
+
+void generateTrainData()
+{
+	//todo open testdatafile
+	std::fstream trainData;
+	std::fstream trainLabels;
+
+	trainData.open("trainData.txt", std::fstream::out | std::fstream::trunc);
+	trainData.seekg(0);
+	trainLabels.open("trainLabels.txt", std::fstream::out | std::fstream::trunc);
+	trainLabels.seekg(0);
+
+
+	srand(static_cast <unsigned> (time(0)));
+	for (int i = 0; i < 400; i++)
+	{
+		float randomBallPos = static_cast <float> (rand()) / static_cast <float>(RAND_MAX);
+		float randomPlayerPos = static_cast <float> (rand()) / static_cast <float>(RAND_MAX);
+
+		randomBallPos *= gameBoard.height;
+		randomPlayerPos *= gameBoard.height;
+
+		AIMOVE correctMove;
+		if (randomBallPos > randomPlayerPos)
+			correctMove = UP;
+		else
+			correctMove = DOWN;
+
+		std::ostringstream stringStreamTrainData;
+		//stringStream << randomBallPos << ',' << randomPlayerPos << ',' << correctMove << '\n';
+		stringStreamTrainData << randomBallPos << ',' << randomPlayerPos << '\n';
+		std::string trainDataLine(stringStreamTrainData.str());
+		trainData.write(trainDataLine.c_str(),trainDataLine.length());
+
+		std::ostringstream stringStreamTrainLabels;
+		stringStreamTrainLabels << correctMove << '\n';
+		std::string trainLabelLine(stringStreamTrainLabels.str());
+		trainLabels.write(trainLabelLine.c_str(), trainLabelLine.length());
+
+	}
+	
+	trainData.close();
+	trainLabels.close();
+
+}
+
 
 
 void setupGames()
@@ -274,6 +360,10 @@ void init()
 	glewInit();
 
 	initShader();
+
+	generateTrainData();
+	setupNeuralNetwork();
+
 	setupGames();
 
 }
